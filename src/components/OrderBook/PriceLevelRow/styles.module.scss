@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    justify-content: space-around;
+    background-color: #121723;
+    position: relative;
+
+    &:after {
+        background-color: '#113534';
+        background-position: center;
+        height: 100%;
+        padding: .3em 0;
+        display: block;
+        content: "";
+        position: absolute;
+        left: 0;
+        right: unset;
+        z-index: 0;
+
+        @media only screen and (min-width: 800px) {
+            left: 'unset';
+            right: 0
+        }
+
+        ;
+    }
+
+
+    span {
+        z-index: 1;
+        min-width: 54px;
+    }
+
+    .price {
+        color: '#118860'
+    }
+}
+
+.priceLevelRowContainer {
+    margin: .155em 0;
+}
