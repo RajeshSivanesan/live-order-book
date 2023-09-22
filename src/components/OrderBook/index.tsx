@@ -1,8 +1,9 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
+import { useSelector } from "react-redux";
 import { useBitfinexHook } from '../../hooks/useBitfinexHook';
 import styles from './styles.module.scss';
 import Loader from '../Loader';
-import { MOBILE_WIDTH } from '../../constants';
+import { ORDERBOOK_LEVELS } from '../../constants';
 import TitleRow from './TitleRow';
 import { formatNumber } from '../../helpers';
 import PriceLevelRow from './PriceLevelRow';
@@ -31,7 +32,7 @@ const buildPriceLevels = (levels: any, orderType: OrderType = OrderType.BIDS, wi
         iteratingLevels = Object.keys(levels);
     }
     return (
-        iteratingLevels.map((level, idx) => {
+        iteratingLevels.slice(0, ORDERBOOK_LEVELS).map((level, idx) => {
             const obj = levels[level];
             const calculatedTotal: string = formatNumber(obj.amount);
             const depth = previousValue + obj.amount;
@@ -56,10 +57,11 @@ const buildPriceLevels = (levels: any, orderType: OrderType = OrderType.BIDS, wi
     );
 };
 
-const OrderBook = ({ isFeedKilled, windowWidth }: OrderBookProps) => {
-    const { BOOK } = useBitfinexHook(isFeedKilled);
+const OrderBook: FunctionComponent<OrderBookProps> = ({ isFeedKilled, windowWidth }: OrderBookProps) => {
+    useBitfinexHook(isFeedKilled);
 
-    const { bids, asks } = BOOK;
+    //@ts-ignore
+    const { bids, asks } = useSelector<any>(state => state.orderBook);
 
     return (
         <div className={styles.container}>
@@ -72,7 +74,7 @@ const OrderBook = ({ isFeedKilled, windowWidth }: OrderBookProps) => {
           {/* <Spread bids={bids} asks={asks} /> */}
           <div className={styles.tableContainer}>
             <TitleRow windowWidth={windowWidth} reversedFieldsOrder={true} />
-            <div>
+            <div style={{ minHeight: "100%" }}>
               {buildPriceLevels(asks, OrderType.ASKS, windowWidth)}
             </div>
           </div>

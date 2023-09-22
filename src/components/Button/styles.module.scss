@@ -1,0 +1,15 @@
+.container {
+    padding: .3em .7em;
+    margin: 1em;
+    border-radius: 4px;
+    color: white;
+    font-family: "Calibri",
+    sans-serif;
+    font-size: 1.2em;
+    background-color: white;
+
+    &:hover {
+        cursor: pointer;
+        opacity: .8;
+    }
+}

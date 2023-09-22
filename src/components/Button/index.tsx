@@ -1,19 +1,19 @@
-// import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 
-// import styles from "./styles.module.scss";
+import styles from "./styles.module.scss";
 
-// interface ButtonProps {
-//   title: string;
-//   backgroundColor: string;
-//   callback: () => void;
-// }
+interface ButtonProps {
+  title: string;
+  backgroundColor: string;
+  callback: () => void;
+}
 
-// const Button: FunctionComponent<ButtonProps> = ({ title, backgroundColor = '#5741d9', callback}) => {
-//   return (
-//     <button className={styles.container} backgroundColor={backgroundColor} onClick={callback}>
-//       {title}
-//     </button>
-//   );
-// };
+const Button: FunctionComponent<ButtonProps> = ({ title, backgroundColor = '#5741d9', callback}) => {
+  return (
+    <div className={styles.container} style={{ backgroundColor }} onClick={callback}>
+      {title}
+    </div>
+  );
+};
 
-// export default Button;
+export default Button;

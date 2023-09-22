@@ -1,19 +1,15 @@
 import { useEffect, useState } from 'react'
+import { Provider } from "react-redux";
 import orderBookLogo from './assets/orderbook.svg'
 import './App.css'
 import Header from './components/Header'
 import OrderBook from './components/OrderBook'
+import store from './redux/store'
+import Footer from './components/Footer';
 
 function App() {
-  const [count, setCount] = useState(0);
   const [windowWidth, setWindowWidth] = useState(0);
   const [isFeedKilled, setIsFeedKilled] = useState(false);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsFeedKilled(true);
-    }, 5000);
-  }, []);
 
   // Window width detection
   useEffect(() => {
@@ -23,8 +19,12 @@ function App() {
     setWindowWidth(() => window.innerWidth);
   }, []);
 
+  const toggleFeed = (): void => {
+    setIsFeedKilled(!isFeedKilled);
+  }
+
   return (
-    <>
+    <Provider store={store}>
       <div style={{ display: 'flex', gap: 20, alignItems: 'center', justifyContent: 'center' }}>
         <a href="https://trading.bitfinex.com/t?demo=true" target="_blank">
           <img src={orderBookLogo} className="logo orderbook" alt="Order Book logo" />
@@ -33,7 +33,8 @@ function App() {
       </div>
       <Header />
       <OrderBook windowWidth={windowWidth} isFeedKilled={isFeedKilled} />
-    </>
+      <Footer killFeedCallback={toggleFeed} isFeedKilled={isFeedKilled} />
+    </Provider>
   )
 }
 

@@ -1,0 +1,7 @@
+export const sagaActions = {
+    ADD_BIDS: "ADD_BIDS",
+    ADD_ASKS: "ADD_ASKS",
+    DELETE_BIDS: "DELETE_BIDS",
+    DELETE_ASKS: "DELETE_ASKS",
+    UPDATE_MCNT_BY_ONE: "UPDATE_MCNT_BY_ONE"
+};

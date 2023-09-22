@@ -1,133 +1,82 @@
 import { useEffect } from "react";
-import CRC from 'crc-32';
+// import CRC from 'crc-32';
 //@ts-ignore
 import * as _ from 'lodash';
 import useWebSocket from "react-use-websocket";
+import { useSelector, useDispatch } from "react-redux";
+import { sagaActions } from "../redux/sagaActions";
 
 const WSS_FEED_URL: string = 'wss://api-pub.bitfinex.com/ws/2';
-let seq: number
-interface dynamicObj {
-    [key: string]: any
-}
-let BOOK: dynamicObj = { mcnt: 0, bids: {}, asks: {}, psnap: {} }
 
 export const useBitfinexHook = (isFeedKilled = false) => {
+    //@ts-ignore
+    const { mcnt, bids, asks } = useSelector<any>(state => {
+        console.log(state);
+        return state.orderBook
+    });
+    const dispatch = useDispatch();
     const process = (msg: any) => {
-    if (msg.event) return;
+        // if the msg has event property defined
+        // we can ignore that event !!!
+        if (msg.event) return;
 
-    if (msg[1] === 'hb') {
-        seq = +msg[2]
-        return
-        } else if (msg[1] === 'cs') {
-        seq = +msg[3]
-
-        const checksum = msg[2]
-        const csdata = []
-        const bids_keys = BOOK.psnap['bids']
-        const asks_keys = BOOK.psnap['asks']
-
-        for (let i = 0; i < 25; i++) {
-            if (bids_keys[i]) {
-                const price = bids_keys[i]
-                const pp = BOOK.bids[price]
-                csdata.push(pp.price, pp.amount)
-            }
-            if (asks_keys[i]) {
-                const price = asks_keys[i]
-                const pp = BOOK.asks[price]
-                csdata.push(pp.price, -pp.amount)
-            }
+        // ignore heartbeat and checksum
+        if (msg[1] === 'hb' || msg[1] === 'cs') {
+            return
         }
 
-        const cs_str = csdata.join(':')
-        const cs_calc = CRC.str(cs_str)
-
-        //@ts-ignore
-        if (cs_calc !== checksum) {
-            console.error('CHECKSUM_FAILED')
-            // process.exit(-1)
-            throw new Error("CHECKSUM_FAILED");
-        }
-        return
-        }
-
-        if (BOOK.mcnt === 0) {
+        if (mcnt === 0) {
             _.each(msg[1], function (pp: any) {
                 pp = { price: pp[0], cnt: pp[1], amount: pp[2], timeStamp: msg[3] }
                 const side = pp.amount >= 0 ? 'bids' : 'asks'
-                pp.amount = Math.abs(pp.amount)
-                BOOK[side][pp.price] = pp
+                pp.amount = Math.abs(pp.amount);
+                if (side === 'bids') {
+                    dispatch({ type: sagaActions.ADD_BIDS, payload: pp })
+                } else {
+                    dispatch({ type: sagaActions.ADD_ASKS, payload: pp })
+                }
             })
         } else {
-        let timestamp = msg[3];
-        let newMsg = msg[1];
-        if (msg[2]) {
-            const cseq = +msg[2]
-            newMsg = msg[1]
+            let newMsg = msg[1];
 
-            if (!seq) {
-            seq = cseq - 1
-            }
+            let pp = { price: newMsg[0], cnt: newMsg[1], amount: +newMsg[2] }
 
-            if (cseq - seq !== 1) {
-            console.error('OUT OF SEQUENCE', seq, cseq)
-            // process.exit()
-            }
-
-            seq = cseq
-        }
-
-        let pp = { price: newMsg[0], cnt: newMsg[1], amount: +newMsg[2], timeStamp: timestamp }
-
-        if (!pp.cnt) {
-            if (pp.amount > 0) {
-            if (BOOK['bids'][pp.price]) {
-                delete BOOK['bids'][pp.price]
-            }
-            } else if (pp.amount < 0) {
-            if (BOOK['asks'][pp.price]) {
-                delete BOOK['asks'][pp.price]
-            }
-            }
-        } else {
-            let side = pp.amount >= 0 ? 'bids' : 'asks'
-            pp.amount = Math.abs(pp.amount)
-            BOOK[side][pp.price] = pp
-        }
-        }
-        _.each(['bids', 'asks'], function(side: any) {
-        let sbook = BOOK[side]
-        let bentries = Object.keys(sbook)
-    
-        bentries.sort(function(a: any, b: any) {
-            if (+sbook[a].price === +sbook[b].price) {
-            return a - b
-            }
-            if (side === 'bids') {
-                return +sbook[a].price >= +sbook[b].price ? 1 : -1
+            if (!pp.cnt) {
+                if (pp.amount > 0) {
+                    if (bids[pp.price]) {
+                        dispatch({ type: sagaActions.DELETE_BIDS, payload: pp })
+                    }
+                } else if (pp.amount < 0) {
+                    if (asks[pp.price]) {
+                        dispatch({ type: sagaActions.DELETE_ASKS, payload: pp })
+                    }
+                }
             } else {
-                return +sbook[a].price <= +sbook[b].price ? -1 : 1
+                let side = pp.amount >= 0 ? 'bids' : 'asks'
+                pp.amount = Math.abs(pp.amount)
+                if (side === 'bids') {
+                    dispatch({ type: sagaActions.ADD_BIDS, payload: pp })
+                } else {
+                    dispatch({ type: sagaActions.ADD_ASKS, payload: pp })
+                }
             }
-        })
-    
-            BOOK.psnap[side] = bentries
-        })
+        }
 
-        BOOK.mcnt++
+        dispatch({ type: sagaActions.UPDATE_MCNT_BY_ONE });
     }
 
     const processMessages = (event: any) => {
         const response = JSON.parse(event.data);
 
         if (event.event) return
-        
+
         process(response);
     };
 
     const { sendJsonMessage, getWebSocket } = useWebSocket(WSS_FEED_URL, {
         onOpen: () => console.log('WebSocket connection opened.'),
         onClose: () => console.log('WebSocket connection closed.'),
-        shouldReconnect: (closeEvent) => false,
+        shouldReconnect: (closeEvent) => true,
         onMessage: (event: WebSocketEventMap['message']) => processMessages(event)
     });
 
@@ -154,6 +103,4 @@ export const useBitfinexHook = (isFeedKilled = false) => {
             connect();
         }
     }, [isFeedKilled, sendJsonMessage, getWebSocket]);
-
-    return { BOOK };
 }
