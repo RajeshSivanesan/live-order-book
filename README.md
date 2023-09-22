@@ -1,27 +1,59 @@
-# React + TypeScript + Vite
+# Order Book
+A real time Order Book app built with React/Typescript and powered by WebSockets.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<hr />
 
-Currently, two official plugins are available:
+## Tech stack
+ - React / Typescript
+ - SASS
+ - WebSockets / react-use-websocket
+ - react-testing-library
+ - jest
+ - Redux / Redux Saga / Redux toolkit
+ 
+### Screenshots
+![Default View](image.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![Responsive](image-1.png)
 
-## Expanding the ESLint configuration
+## Application features:
+One extra feature i have incorporated for killing / renewing the feed
+### Kill Feed Button
+1. Clicking this button stops the feed.
+2. Clicking this button second time renews the feed.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Running the app locally
 
-- Configure the top-level `parserOptions` property like this:
+To run the app, follow these steps.
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+1. Ensure that [NodeJS](http://nodejs.org/) is installed.
+2. From the project folder, execute the following commands:
+
+To clone the project
+```shell
+  git clone git@github.com:RajeshSivanesan/live-order-book.git
+  OR
+  git clone https://github.com/RajeshSivanesan/live-order-book.git
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Move to the directory
+```shell
+  cd live-order-book
+```
+
+To install dependencies:
+```shell
+  npm install
+```
+
+To run the app:
+
+```shell
+  npm run dev
+```
+
+To run the tests:
+
+```shell
+  npm run test
+```

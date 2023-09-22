@@ -11,7 +11,6 @@ const WSS_FEED_URL: string = 'wss://api-pub.bitfinex.com/ws/2';
 export const useBitfinexHook = (isFeedKilled = false) => {
     //@ts-ignore
     const { mcnt, bids, asks } = useSelector<any>(state => {
-        console.log(state);
         return state.orderBook
     });
     const dispatch = useDispatch();
@@ -75,8 +74,13 @@ export const useBitfinexHook = (isFeedKilled = false) => {
 
     const { sendJsonMessage, getWebSocket } = useWebSocket(WSS_FEED_URL, {
         onOpen: () => console.log('WebSocket connection opened.'),
-        onClose: () => console.log('WebSocket connection closed.'),
-        shouldReconnect: (closeEvent) => true,
+        onClose: () => {
+            console.log('WebSocket connection closed.');
+        },
+        onError: () => {
+            // console.log(event);
+        },
+        shouldReconnect: () => true,
         onMessage: (event: WebSocketEventMap['message']) => processMessages(event)
     });
 

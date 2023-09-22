@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 
 import styles from "./styles.module.scss";
 
 interface ButtonProps {
   title: string;
-  backgroundColor: string;
+  backgroundColor?: string;
   callback: () => void;
 }
 

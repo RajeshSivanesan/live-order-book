@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 
 import styles from "./styles.module.scss";
 import { MOBILE_WIDTH } from "../../../constants";
@@ -8,7 +8,7 @@ interface PriceLevelRowProps {
     size: string;
     price: string;
     amount: string;
-    reversedFieldsOrder: boolean;
+    reversedFieldsOrder?: boolean;
     windowWidth: number;
 }
 

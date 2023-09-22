@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import styles from "./styles.module.scss";
 
 const Loader: FunctionComponent = () => {
     return (
         <div className={styles.container}>
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
+            <svg data-testid="loaderSvg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
                 x="0px" y="0px"
                 width="24px" height="24px" viewBox="0 0 24 24" xmlSpace="preserve">
                 <rect x="0" y="0" width="4" height="7" fill="#333">
