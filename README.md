@@ -12,7 +12,7 @@ A real time Order Book app built with React/Typescript and powered by WebSockets
  - Redux / Redux Saga / Redux toolkit
  
 ### Screenshots
-![Default View](image.png)
+![Default View](image-2.png)
 
 ![Responsive](image-1.png)
 
