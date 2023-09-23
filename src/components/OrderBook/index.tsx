@@ -41,7 +41,7 @@ const buildPriceLevels = (levels: any, orderType: OrderType = OrderType.BIDS, wi
             previousValue = depth;
 
             return (
-                <div style={{ margin: idx === iteratingLevels.length -1 ? "0px 0px" : '.155em 0' }} key={idx + depth}>
+                <div style={{ margin: idx === iteratingLevels.length -1 ? "0px 0px" : '.155em 0' }} key={depth}>
                     <DepthVisualizer key={depth} windowWidth={windowWidth} depth={depth} orderType={orderType} />
                     <PriceLevelRow key={size + total}
                         total={total}
