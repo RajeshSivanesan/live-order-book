@@ -58,13 +58,23 @@ Move to the directory
 
 To install dependencies:
 ```shell
-  npm install
+  npm install --force
+  Added snackbar library which is expecting this to happen.
 ```
 
 To run the app:
 
 ```shell
   npm run dev
+```
+
+To launch the ui:
+
+```shell
+  Please check the url which prints post npm run dev
+  Default - http://localhost:5173/
+  If the port is busy, it will pick the next one - 5174
+  so always keep an eye on the port number
 ```
 
 To run the tests:
