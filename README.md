@@ -12,13 +12,11 @@ A real time Order Book app built with React/Typescript and powered by WebSockets
  - Redux / Redux Saga / Redux toolkit
  
 ### Screenshots
-![Default View](/image-2.png)
+![Alt text](image-5.png)
 
-![Responsive](/image-1.png)
+![Alt text](image-3.png)
 
-![Test Case Coverage](/image-4.png)
-
-![Npm Audit Details](/image-3.png)
+![Alt text](image-6.png)
 
 ## Application features:
 One extra feature i have incorporated for killing / renewing the feed.
