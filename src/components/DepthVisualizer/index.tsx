@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import { OrderType } from "../OrderBook";
 import { MOBILE_WIDTH } from "../../constants";
 
@@ -26,4 +26,4 @@ const DepthVisualizer: FunctionComponent<DepthVisualizerProps> = ({windowWidth, 
   }} />;
 };
 
-export default DepthVisualizer;
+export default React.memo(DepthVisualizer);

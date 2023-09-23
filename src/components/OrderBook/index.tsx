@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import { useSelector } from "react-redux";
 import { useBitfinexHook } from '../../hooks/useBitfinexHook';
 import styles from './styles.module.scss';
@@ -41,7 +41,7 @@ const buildPriceLevels = (levels: any, orderType: OrderType = OrderType.BIDS, wi
             previousValue = depth;
 
             return (
-                <div style={{ margin: '.155em 0' }} key={idx + depth}>
+                <div style={{ margin: idx === iteratingLevels.length -1 ? "0px 0px" : '.155em 0' }} key={idx + depth}>
                     <DepthVisualizer key={depth} windowWidth={windowWidth} depth={depth} orderType={orderType} />
                     <PriceLevelRow key={size + total}
                         total={total}
@@ -58,6 +58,8 @@ const buildPriceLevels = (levels: any, orderType: OrderType = OrderType.BIDS, wi
 
 const OrderBook: FunctionComponent<OrderBookProps> = ({ isFeedKilled, windowWidth }: OrderBookProps) => {
     useBitfinexHook(isFeedKilled);
+
+    useEffect(() => { console.log('mounted'); }, [])
 
     //@ts-ignore
     const { bids, asks } = useSelector<any>(state => state.orderBook);
