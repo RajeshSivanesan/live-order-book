@@ -9,8 +9,8 @@ import saga from "./saga";
 const initialState: any = {
   bids: {},
   asks: {},
-  precision: "P0",
-  mcnt: 0
+  mcnt: 0,
+  error: ""
 }
 
 export interface AddBidsAsksPayload {
@@ -47,18 +47,21 @@ const orderBookSlice = createSlice({
     },
     updateMcntByOne: (state) => {
       state.mcnt++;
+    },
+    failed: (state, action: PayloadAction<any>) => {
+      state.error = action.payload;
     }
   }
 });
 
-export const { addBids, addAsks, deleteAsks, deleteBids, updateMcntByOne } = orderBookSlice.actions;
+export const { addBids, addAsks, deleteAsks, deleteBids, updateMcntByOne, failed } = orderBookSlice.actions;
 
 /**
  * Add all the state in local storage
  * @param getState
  * @returns {function(*): function(*=)}
  */
-const localStorageMiddleware = ({ getState }: any) => { // <--- FOCUS HERE
+const localStorageMiddleware = ({ getState }: any) => {
   return (next: Function) => (action: PayloadAction) => {
     const result = next(action);
     localStorage.setItem('applicationState', JSON.stringify(

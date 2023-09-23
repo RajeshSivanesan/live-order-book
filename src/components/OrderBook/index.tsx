@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { useBitfinexHook } from '../../hooks/useBitfinexHook';
 import styles from './styles.module.scss';
 import Loader from '../Loader';
-import { ORDERBOOK_LEVELS } from '../../constants';
 import TitleRow from './TitleRow';
 import { formatNumber } from '../../helpers';
 import PriceLevelRow from './PriceLevelRow';
@@ -32,7 +31,7 @@ const buildPriceLevels = (levels: any, orderType: OrderType = OrderType.BIDS, wi
         iteratingLevels = Object.keys(levels);
     }
     return (
-        iteratingLevels.slice(0, ORDERBOOK_LEVELS).map((level, idx) => {
+        iteratingLevels.map((level, idx) => {
             const obj = levels[level];
             const calculatedTotal: string = formatNumber(obj.amount);
             const depth = previousValue + obj.amount;
@@ -42,7 +41,7 @@ const buildPriceLevels = (levels: any, orderType: OrderType = OrderType.BIDS, wi
             previousValue = depth;
 
             return (
-                <div key={idx + depth}>
+                <div style={{ margin: '.155em 0' }} key={idx + depth}>
                     <DepthVisualizer key={depth} windowWidth={windowWidth} depth={depth} orderType={orderType} />
                     <PriceLevelRow key={size + total}
                         total={total}
@@ -65,23 +64,22 @@ const OrderBook: FunctionComponent<OrderBookProps> = ({ isFeedKilled, windowWidt
 
     return (
         <div className={styles.container}>
-        {Object.keys(bids).length && Object.keys(asks).length ?
-        <>
-          <div className={styles.tableContainer}>
-            <TitleRow windowWidth={windowWidth} reversedFieldsOrder={false} />
-            <div>{buildPriceLevels(bids, OrderType.BIDS, windowWidth)}</div>
-          </div>
-          {/* <Spread bids={bids} asks={asks} /> */}
-          <div className={styles.tableContainer}>
-            <TitleRow windowWidth={windowWidth} reversedFieldsOrder={true} />
-            <div style={{ minHeight: "100%" }}>
-              {buildPriceLevels(asks, OrderType.ASKS, windowWidth)}
-            </div>
-          </div>
-        </> :
-        <Loader />}
+            {Object.keys(bids).length && Object.keys(asks).length ?
+                <>
+                    <div className={styles.tableContainer}>
+                        <TitleRow windowWidth={windowWidth} reversedFieldsOrder={false} />
+                        <div>{buildPriceLevels(bids, OrderType.BIDS, windowWidth)}</div>
+                    </div>
+                    <div className={styles.tableContainer}>
+                        <TitleRow windowWidth={windowWidth} reversedFieldsOrder={true} />
+                        <div>
+                            {buildPriceLevels(asks, OrderType.ASKS, windowWidth)}
+                        </div>
+                    </div>
+                </> :
+                <Loader />}
         </div>
     )
 }
 
-export default OrderBook;
+export default React.memo(OrderBook);

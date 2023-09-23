@@ -1,6 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 //@ts-ignore
 import configureStore from 'redux-mock-store'
+import SnackbarProvider from 'react-simple-snackbar'
 
 import OrderBook from './index';
 import { Provider } from 'react-redux';
@@ -18,7 +19,7 @@ const mockStore = configureStore()
 test('renders OrderBook component with loader ui', async () => {
     await act( async () => {
         const store = mockStore(initialState);
-        render(<Provider store={store}><OrderBook isFeedKilled={false} windowWidth={800} /></Provider>);
+        render(<Provider store={store}><SnackbarProvider><OrderBook isFeedKilled={false} windowWidth={800} /></SnackbarProvider></Provider>);
     });
     const svgElement = screen.queryByTestId('loaderSvg');
     expect(svgElement).toBeTruthy();
@@ -46,7 +47,7 @@ test('renders OrderBook component with orders list', async () => {
     }
     await act( async () => {
         const store = mockStore(newInitialState);
-        render(<Provider store={store}><OrderBook isFeedKilled={false} windowWidth={800} /></Provider>);
+        render(<Provider store={store}><SnackbarProvider><OrderBook isFeedKilled={false} windowWidth={800} /></SnackbarProvider></Provider>);
     });
     const priceLevelRow = screen.getAllByTestId('price-level-row');
     expect(priceLevelRow[0]).toBeTruthy();

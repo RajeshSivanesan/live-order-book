@@ -2,8 +2,8 @@ import { act, render } from '@testing-library/react';
 import { useBitfinexHook } from './useBitfinexHook';
 import { Provider } from 'react-redux';
 //@ts-ignore
+import SnackbarProvider from 'react-simple-snackbar'
 import configureStore from 'redux-mock-store';
-// import useWebSocket from 'react-use-websocket';
 
 const initialState = {
     orderBook: {
@@ -19,10 +19,10 @@ jest.mock('react-use-websocket', () => ({
     default: jest.fn((url: string, config: any) => {
         console.log(url);
         console.log(config);
-        config.onMessage({
-            data: JSON.stringify([26234, [2612, count === 0 ? 2: 0, 0.05]])
-        })
         count++;
+        config.onMessage({
+            data: JSON.stringify([26234, [2612, count % 2 === 0 ? 2: 0, count % 2 === 0 ? 0.05: -2]])
+        })
         return {
             sendJsonMessage: jest.fn(),
             getWebSocket: jest.fn()
@@ -30,10 +30,22 @@ jest.mock('react-use-websocket', () => ({
     })
 }));
 
+jest.mock('react-simple-snackbar', () => ({
+    ...jest.requireActual('react-simple-snackbar'),
+    useSnackbar: () => {
+        return [jest.fn()]
+    },
+    default: {
+        useSnackbar: () => {
+            return [jest.fn()]
+        },
+    },
+}))
+
 const mockStore = configureStore()
 
-const TestComponent = () => {
-    useBitfinexHook();
+const TestComponent = ({ isFeedKilled = false }) => {
+    useBitfinexHook(isFeedKilled);
     return null;
 }
 
@@ -52,6 +64,11 @@ test('should use bitfinexHook', async () => {
                     price: 23456,
                     cnt: 10,
                     amount: 0.05
+                },
+                2612: {
+                    price: 2612,
+                    cnt: 10,
+                    amount: 0.05
                 }
             },
             asks: {
@@ -59,6 +76,11 @@ test('should use bitfinexHook', async () => {
                     price: 23476,
                     cnt: 1,
                     amount: 2.05
+                },
+                2612: {
+                    price: 2612,
+                    cnt: 10,
+                    amount: 0.05
                 }
             },
             mcnt: 2
@@ -67,6 +89,49 @@ test('should use bitfinexHook', async () => {
     await act( async () => {
         const store = mockStore(newInitialState);
         render(<Provider store={store}><TestComponent /></Provider>);
+    });
+})
+
+test('should use bitfinexHook', async () => {
+    const newInitialState = {
+        orderBook: {
+            bids: {
+                23456: {
+                    price: 23456,
+                    cnt: 10,
+                    amount: 0.05
+                },
+                2612: {
+                    price: 2612,
+                    cnt: 10,
+                    amount: 0.05
+                }
+            },
+            asks: {
+                23476: {
+                    price: 23476,
+                    cnt: 1,
+                    amount: 2.05
+                },
+                2612: {
+                    price: 2612,
+                    cnt: 10,
+                    amount: 0.05
+                }
+            },
+            mcnt: 2
+        }
+    }
+    await act( async () => {
+        const store = mockStore(newInitialState);
+        render(<Provider store={store}><TestComponent /></Provider>);
+    });
+})
+
+test('Feedkilled', async () => {
+    await act( async () => {
+        const store = mockStore(initialState);
+        render(<Provider store={store}><TestComponent isFeedKilled={true} /></Provider>);
     });
 })
 

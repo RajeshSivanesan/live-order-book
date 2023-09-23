@@ -7,3 +7,9 @@ test('renders depth visualizer with certain width and color', () => {
   const divElement = screen.getByTestId('depth-visualizer');
   expect(divElement).toBeTruthy();
 });
+
+test('renders depth visualizer with windowWidth greater than 800', () => {
+  render(<DepthVisualizer depth={33} windowWidth={1000} orderType={OrderType.BIDS} />);
+  const divElement = screen.getByTestId('depth-visualizer');
+  expect(divElement).toBeTruthy();
+});

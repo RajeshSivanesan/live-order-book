@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Provider } from "react-redux";
+//@ts-ignore
+import SnackbarProvider from 'react-simple-snackbar'
 import orderBookLogo from './assets/orderbook.svg'
-import './App.css'
+import styles from './App.module.scss'
 import Header from './components/Header'
 import OrderBook from './components/OrderBook'
 import store from './redux/store'
@@ -25,15 +27,17 @@ function App() {
 
   return (
     <Provider store={store}>
-      <div style={{ display: 'flex', gap: 20, alignItems: 'center', justifyContent: 'center' }}>
-        <a href="https://trading.bitfinex.com/t?demo=true" target="_blank">
-          <img src={orderBookLogo} className="logo orderbook" alt="Order Book logo" />
-        </a>
-        <h3>Bitfinex Order Book</h3>
-      </div>
-      <Header />
-      <OrderBook windowWidth={windowWidth} isFeedKilled={isFeedKilled} />
-      <Footer killFeedCallback={toggleFeed} isFeedKilled={isFeedKilled} />
+      <SnackbarProvider>
+        <div className={styles.container}>
+          <a href="https://trading.bitfinex.com/t?demo=true" target="_blank">
+            <img src={orderBookLogo} className="logo orderbook" alt="Order Book logo" />
+          </a>
+          <h3>Bitfinex Order Book</h3>
+        </div>
+        <Header />
+        <OrderBook windowWidth={windowWidth} isFeedKilled={isFeedKilled} />
+        <Footer killFeedCallback={toggleFeed} isFeedKilled={isFeedKilled} />
+      </SnackbarProvider>
     </Provider>
   )
 }

@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+//@ts-ignore
+import snackbar, { useSnackbar } from 'react-simple-snackbar'
 // import CRC from 'crc-32';
 //@ts-ignore
 import * as _ from 'lodash';
@@ -14,12 +16,14 @@ export const useBitfinexHook = (isFeedKilled = false) => {
         return state.orderBook
     });
     const dispatch = useDispatch();
+    const [openSnackbar] = useSnackbar()
     const process = (msg: any) => {
         // if the msg has event property defined
         // we can ignore that event !!!
         if (msg.event) return;
 
         // ignore heartbeat and checksum
+        // I am aware of how things for hb and cs
         if (msg[1] === 'hb' || msg[1] === 'cs') {
             return
         }
@@ -76,9 +80,10 @@ export const useBitfinexHook = (isFeedKilled = false) => {
         onOpen: () => console.log('WebSocket connection opened.'),
         onClose: () => {
             console.log('WebSocket connection closed.');
+            openSnackbar("Websocket disconnected", 4000);
         },
-        onError: () => {
-            // console.log(event);
+        onError: (event) => {
+            console.log(event);
         },
         shouldReconnect: () => true,
         onMessage: (event: WebSocketEventMap['message']) => processMessages(event)
@@ -99,6 +104,8 @@ export const useBitfinexHook = (isFeedKilled = false) => {
                 symbol: "tBTCUSD"
             };
             sendJsonMessage(subscribeMessage);
+
+            openSnackbar("Websocket connected", 4000);
         }
 
         if (isFeedKilled) {

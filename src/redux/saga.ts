@@ -1,50 +1,45 @@
-import { call, takeEvery, put } from "redux-saga/effects";
-import { AddBidsAsksPayload, addAsks, addBids, deleteAsks, deleteBids, updateMcntByOne } from "./store";
+import { takeEvery, put } from "redux-saga/effects";
+import { AddBidsAsksPayload, addAsks, addBids, deleteAsks, deleteBids, failed, updateMcntByOne } from "./store";
 import { sagaActions } from "./sagaActions";
 import { PayloadAction } from "@reduxjs/toolkit";
 
 export function* sagaAddBids({ payload }: PayloadAction<AddBidsAsksPayload>) {
   try {
     yield put(addBids(payload));
-  } catch (e) {
-    // yield put({ type: "TODO_FETCH_FAILED" });
-    console.log(e);
+  } catch (e: any) {
+    yield put(failed(e?.message));
   }
 }
 
 export function* sagaAddAsks({ payload }: PayloadAction<AddBidsAsksPayload>) {
   try {
     yield put(addAsks(payload));
-  } catch (e) {
-    // yield put({ type: "TODO_FETCH_FAILED" });
-    console.log(e);
+  } catch (e: any) {
+    yield put(failed(e?.message));
   }
 }
 
 export function* sagaDeleteBids({ payload }: any) {
   try {
     yield put(deleteBids(payload));
-  } catch (e) {
-    // yield put({ type: "TODO_FETCH_FAILED" });
-    console.log(e);
+  } catch (e: any) {
+    yield put(failed(e?.message));
   }
 }
 
 export function* sagaDeleteAsks({ payload }: any) {
   try {
     yield put(deleteAsks(payload));
-  } catch (e) {
-    // yield put({ type: "TODO_FETCH_FAILED" });
-    console.log(e);
+  } catch (e: any) {
+    yield put(failed(e?.message));
   }
 }
 
 export function* sagaUpdateMcntByOne() {
   try {
     yield put(updateMcntByOne());
-  } catch (e) {
-    // yield put({ type: "TODO_FETCH_FAILED" });
-    console.log(e);
+  } catch (e: any) {
+    yield put(failed(e?.message));
   }
 }
 
