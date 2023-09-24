@@ -19,7 +19,7 @@ https://rajeshsivanesan.github.io/live-order-book/
 
 ![Alt text](image-3.png)
 
-![Alt text](image-6.png)
+![Alt text](image-1.png)
 
 ![Alt text](image-7.png)
 
