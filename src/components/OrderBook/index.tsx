@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import { useSelector } from "react-redux";
 import { useBitfinexHook } from '../../hooks/useBitfinexHook';
 import styles from './styles.module.scss';
