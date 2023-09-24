@@ -85,7 +85,12 @@ const store = configureStore({
   reducer: {
     orderBook: orderBookSlice.reducer
   },
-  preloadedState: reHydrateStore(),
+  preloadedState: { orderBook: { ...reHydrateStore()?.orderBook ?? {
+    bids: {},
+    asks: {},
+    error: "",
+    mcnt: 0
+  }, error: "" } },
   middleware
 });
 

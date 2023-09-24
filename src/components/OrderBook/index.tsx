@@ -59,8 +59,6 @@ const buildPriceLevels = (levels: any, orderType: OrderType = OrderType.BIDS, wi
 const OrderBook: FunctionComponent<OrderBookProps> = ({ isFeedKilled, windowWidth }: OrderBookProps) => {
     useBitfinexHook(isFeedKilled);
 
-    useEffect(() => { console.log('mounted'); }, [])
-
     //@ts-ignore
     const { bids, asks } = useSelector<any>(state => state.orderBook);
 

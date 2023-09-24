@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
-import { Provider } from "react-redux";
+import { useSelector } from "react-redux";
 //@ts-ignore
-import SnackbarProvider from 'react-simple-snackbar'
-import orderBookLogo from './assets/orderbook.svg'
-import styles from './App.module.scss'
 import Header from './components/Header'
+import styles from './App.module.scss';
 import OrderBook from './components/OrderBook'
-import store from './redux/store'
 import Footer from './components/Footer';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(0);
   const [isFeedKilled, setIsFeedKilled] = useState(false);
+  //@ts-ignore
+  const { error = '' } = useSelector<any>(state => state.orderBook);
 
   // Window width detection
   useEffect(() => {
@@ -25,14 +25,17 @@ function App() {
     setIsFeedKilled(!isFeedKilled);
   }
 
+  if (error) {
+    return <center className={styles.errorContainer}><h4>{`Application Failure - ${error}, please reload again!!!`}</h4></center>
+  }
+
   return (
-    <Provider store={store}>
-      <SnackbarProvider>
-        <Header />
-        <OrderBook windowWidth={windowWidth} isFeedKilled={isFeedKilled} />
-        <Footer killFeedCallback={toggleFeed} isFeedKilled={isFeedKilled} />
-      </SnackbarProvider>
-    </Provider>
+    <>
+      <Header />
+      <OrderBook windowWidth={windowWidth} isFeedKilled={isFeedKilled} />
+      <Footer killFeedCallback={toggleFeed} isFeedKilled={isFeedKilled} />
+      <Toaster />
+    </>
   )
 }
 

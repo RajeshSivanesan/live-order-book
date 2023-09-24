@@ -58,8 +58,7 @@ Move to the directory
 
 To install dependencies:
 ```shell
-  npm install --force
-  Added snackbar library which is expecting this to happen.
+  npm install
 ```
 
 To run the app:

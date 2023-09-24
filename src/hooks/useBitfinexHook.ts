@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 //@ts-ignore
-import snackbar, { useSnackbar } from 'react-simple-snackbar'
-// import CRC from 'crc-32';
+import toast, { Toaster } from 'react-hot-toast';
 //@ts-ignore
 import * as _ from 'lodash';
 import useWebSocket from "react-use-websocket";
@@ -16,7 +15,6 @@ export const useBitfinexHook = (isFeedKilled = false) => {
         return state.orderBook
     });
     const dispatch = useDispatch();
-    const [openSnackbar] = useSnackbar()
     const process = (msg: any) => {
         // if the msg has event property defined
         // we can ignore that event !!!
@@ -78,14 +76,27 @@ export const useBitfinexHook = (isFeedKilled = false) => {
 
     const { sendJsonMessage, getWebSocket } = useWebSocket(WSS_FEED_URL, {
         onOpen: () => console.log('WebSocket connection opened.'),
-        onClose: () => {
-            console.log('WebSocket connection closed.');
-            openSnackbar("Websocket disconnected", 4000);
+        onClose: (event) => {
+            if (event.wasClean) {
+                toast.success(`Websocket disconnected`, {
+                    duration: 4000,
+                    position: 'top-center'
+                });
+            }
         },
-        onError: (event) => {
-            console.log(event);
+        onError: () => {
+            toast.error("Websocket connection failed, please retry again", {
+                duration: 4000,
+                position: 'top-center'
+            });
+            dispatch({ type: sagaActions.FAILED, payload: "Websocket connection failed" });
         },
-        shouldReconnect: () => true,
+        shouldReconnect: (event) => {
+            if (!event.wasClean) {
+                return false;
+            }
+            return true;
+        },
         onMessage: (event: WebSocketEventMap['message']) => processMessages(event)
     });
 
@@ -105,7 +116,10 @@ export const useBitfinexHook = (isFeedKilled = false) => {
             };
             sendJsonMessage(subscribeMessage);
 
-            openSnackbar("Websocket connected", 4000);
+            toast.success("Websocket connected", {
+                duration: 4000,
+                position: 'top-center'
+            });
         }
 
         if (isFeedKilled) {

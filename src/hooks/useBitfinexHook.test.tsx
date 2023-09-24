@@ -2,7 +2,7 @@ import { act, render } from '@testing-library/react';
 import { useBitfinexHook } from './useBitfinexHook';
 import { Provider } from 'react-redux';
 //@ts-ignore
-import SnackbarProvider from 'react-simple-snackbar'
+import toast, { Toaster } from 'react-hot-toast'
 import configureStore from 'redux-mock-store';
 
 const initialState = {
@@ -30,16 +30,15 @@ jest.mock('react-use-websocket', () => ({
     })
 }));
 
-jest.mock('react-simple-snackbar', () => ({
-    ...jest.requireActual('react-simple-snackbar'),
-    useSnackbar: () => {
-        return [jest.fn()]
+jest.mock('react-hot-toast', () => ({
+    __esModule: true,
+    Toaster: () => {
+        return <></>
     },
     default: {
-        useSnackbar: () => {
-            return [jest.fn()]
-        },
-    },
+        success: jest.fn(),
+        error: jest.fn()
+    }
 }))
 
 const mockStore = configureStore()

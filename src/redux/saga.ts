@@ -43,10 +43,15 @@ export function* sagaUpdateMcntByOne() {
   }
 }
 
+export function* sagaFailed({ payload }: any) {
+  yield put(failed(payload));
+}
+
 export default function* rootSaga() {
   yield takeEvery(sagaActions.ADD_BIDS, sagaAddBids);
   yield takeEvery(sagaActions.ADD_ASKS, sagaAddAsks);
   yield takeEvery(sagaActions.DELETE_BIDS, sagaDeleteBids);
   yield takeEvery(sagaActions.DELETE_ASKS, sagaDeleteAsks);
-  yield takeEvery(sagaActions.UPDATE_MCNT_BY_ONE, sagaUpdateMcntByOne)
+  yield takeEvery(sagaActions.UPDATE_MCNT_BY_ONE, sagaUpdateMcntByOne);
+  yield takeEvery(sagaActions.FAILED, sagaFailed);
 }
