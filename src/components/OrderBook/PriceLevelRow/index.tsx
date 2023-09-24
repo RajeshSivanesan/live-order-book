@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 
 import styles from "./styles.module.scss";
 import { MOBILE_WIDTH } from "../../../constants";
@@ -21,7 +21,7 @@ const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
     windowWidth
 }) => {
     return (
-        <div className={styles.container} data-testid='price-level-row'>
+        <div className={`${styles.container}`} data-testid='price-level-row'>
             {reversedFieldsOrder || windowWidth < MOBILE_WIDTH ?
                 <>
                     <span className='price'>{price}</span>
@@ -39,4 +39,4 @@ const PriceLevelRow: FunctionComponent<PriceLevelRowProps> = ({
     );
 };
 
-export default PriceLevelRow;
+export default React.memo(PriceLevelRow);
