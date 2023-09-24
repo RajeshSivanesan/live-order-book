@@ -6,6 +6,7 @@ interface DepthVisualizerProps {
   depth: number;
   orderType: OrderType;
   windowWidth: number;
+  maxTotal?: number;
 }
 
 const DepthVisualizerColors = {
@@ -13,15 +14,17 @@ const DepthVisualizerColors = {
   ASKS: "#3d1e28"
 };
 
-const DepthVisualizer: FunctionComponent<DepthVisualizerProps> = ({windowWidth, depth, orderType }) => {
+const DepthVisualizer: FunctionComponent<DepthVisualizerProps> = ({windowWidth, depth, orderType, maxTotal }) => {
+  const width = (depth / 15) * 100;
   return <div data-testid="depth-visualizer" style={{
     backgroundColor: `${orderType === OrderType.BIDS ? DepthVisualizerColors.BIDS : DepthVisualizerColors.ASKS}`,
     height: "1.250em",
-    width: `${depth}%`,
-    position: "relative",
-    top: 21,
-    left: `${orderType === OrderType.BIDS && windowWidth > MOBILE_WIDTH ? `${100 - depth}%` : 0}`,
-    marginTop: -24,
+    width: `${width > 100 ? 100 : width}%`,
+    position: "absolute",
+    top: 0,
+    right: 0,
+    transition: "width 0.3s ease",
+    left: `${orderType === OrderType.BIDS && windowWidth > MOBILE_WIDTH ? `${100 - width < 0 ? 0 : 100 - width}%` : 0}`,
     zIndex: 1,
   }} />;
 };
