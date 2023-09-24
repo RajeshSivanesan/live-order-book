@@ -32,7 +32,7 @@ const buildPriceLevels = (levels: any, orderType: OrderType = OrderType.BIDS, wi
         iteratingLevels = Object.keys(levels);
     }
     return (
-        iteratingLevels.slice(0, ORDERBOOK_LEVELS).map((level, idx) => {
+        iteratingLevels.slice(0, ORDERBOOK_LEVELS).map((level) => {
             const obj = levels[level];
             const calculatedTotal: string = formatNumber(obj.amount);
             const depth = previousValue + obj.amount;
