@@ -10,6 +10,9 @@ A real time Order Book app built with React/Typescript and powered by WebSockets
  - react-testing-library
  - jest / React testing library
  - Redux / Redux Saga / Redux toolkit
+
+### Demo Github Pages hosted URL
+https://rajeshsivanesan.github.io/live-order-book/
  
 ### Screenshots
 ![Alt text](image-5.png)
@@ -17,6 +20,10 @@ A real time Order Book app built with React/Typescript and powered by WebSockets
 ![Alt text](image-3.png)
 
 ![Alt text](image-6.png)
+
+![Alt text](image-7.png)
+
+![Alt text](image-8.png)
 
 Note: Screenshots not showing up. Have uploaded to google drive
 Please check - https://drive.google.com/drive/u/2/folders/11-r0yf9HAgqXP1X1JMaXBCr5lxnDHY5q
@@ -36,9 +43,6 @@ Used local storage to save the information, on load via redux it will be preload
 ### Kill Feed Button
 1. Clicking this button stops the feed.
 2. Clicking this button second time renews the feed.
-
-### Demo Github Pages hosted URL
-https://rajeshsivanesan.github.io/live-order-book/
 
 ### Running the app locally
 
