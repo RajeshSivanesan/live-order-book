@@ -7,6 +7,7 @@ import TitleRow from './TitleRow';
 import { formatNumber } from '../../helpers';
 import PriceLevelRow from './PriceLevelRow';
 import DepthVisualizer from '../DepthVisualizer';
+import { ORDERBOOK_LEVELS } from '../../constants';
 
 export enum OrderType {
   BIDS,
@@ -31,7 +32,7 @@ const buildPriceLevels = (levels: any, orderType: OrderType = OrderType.BIDS, wi
         iteratingLevels = Object.keys(levels);
     }
     return (
-        iteratingLevels.map((level, idx) => {
+        iteratingLevels.slice(0, ORDERBOOK_LEVELS).map((level, idx) => {
             const obj = levels[level];
             const calculatedTotal: string = formatNumber(obj.amount);
             const depth = previousValue + obj.amount;
